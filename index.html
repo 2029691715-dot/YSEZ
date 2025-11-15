@@ -1,0 +1,1889 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>沂水二中22级回忆录 | 青春永不散场</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "微软雅黑", sans-serif;
+        }
+        body {
+            background-color: #f5f5f5;
+            padding: 20px;
+            line-height: 1.8;
+        }
+        /* 实名弹窗 */
+        .auth-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+        .auth-form {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+        }
+        .auth-form h2 {
+            color: #ff0000;
+            margin-bottom: 20px;
+        }
+        .auth-form input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+        .auth-form button {
+            width: 100%;
+            padding: 10px;
+            background: #ff0000;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        /* 顶部状态区 */
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .current-user {
+            color: #666;
+        }
+        .current-user span {
+            color: #ff0000;
+            font-weight: bold;
+        }
+        .admin-login {
+            display: flex;
+            gap: 5px;
+        }
+        .admin-login input {
+            padding: 4px 8px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            font-size: 14px;
+        }
+        .admin-login button {
+            padding: 4px 8px;
+            border: none;
+            border-radius: 3px;
+            background: #ff0000;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        /* 标签页样式 */
+        .tab-container {
+            margin-bottom: 20px;
+        }
+        .tabs {
+            display: flex;
+            border-bottom: 2px solid #ddd;
+        }
+        .tab {
+            padding: 10px 20px;
+            background: #eee;
+            border: none;
+            border-radius: 8px 8px 0 0;
+            cursor: pointer;
+            font-size: 16px;
+            margin-right: 5px;
+        }
+        .tab.active {
+            background: #ff0000;
+            color: white;
+        }
+        .tab-content {
+            display: none;
+            padding: 20px 0;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        /* 通用页面样式 */
+        h1 {
+            text-align: center;
+            margin: 20px 0;
+            color: #333;
+            font-size: 24px;
+        }
+        h4 {
+            text-align: center;
+            color: #666;
+            margin: 10px 0;
+        }
+        h3 {
+            text-align: center;
+            margin: 15px 0;
+            font-size: 18px;
+        }
+        .warning {
+            background: #fff3cd;
+            padding: 12px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-weight: bold;
+            color: #856404;
+            text-align: center;
+        }
+        .rule {
+            background: #e9f5ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        /* 主内容区 - 话题样式 */
+        .topic {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .topic h2 {
+            color: #ff0000;
+            margin-bottom: 15px;
+            font-size: 19px;
+            border-left: 4px solid #ff0000;
+            padding-left: 10px;
+        }
+        /* 评论样式 */
+        .comment-group {
+            margin: 15px 0;
+        }
+        .collapse-btn {
+            padding: 4px 8px;
+            border: none;
+            border-radius: 4px;
+            background: #f0f0f0;
+            color: #333;
+            cursor: pointer;
+            font-size: 13px;
+            margin-bottom: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .comment-container {
+            margin: 10px 0;
+        }
+        .comment {
+            padding: 10px;
+            border-radius: 6px;
+            background: #f9f9f9;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        /* 回复评论的特殊样式 - 改为独立评论但有标记 */
+        .reply-comment {
+            background: #f0f8ff;
+            border-left: 3px solid #44aaff;
+        }
+        .comment-content {
+            flex: 1;
+        }
+        .comment-author {
+            color: #ff0000;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+        .reply-to {
+            font-size: 12px;
+            color: #0066cc;
+            margin-bottom: 5px;
+            display: block;
+            font-style: italic;
+        }
+        .comment-time {
+            font-size: 12px;
+            color: #999;
+            margin-top: 3px;
+            display: block;
+        }
+        .comment-actions {
+            display: flex;
+            gap: 8px;
+            margin-left: 10px;
+            margin-top: 2px;
+        }
+        .action-btn {
+            padding: 3px 8px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            color: white;
+        }
+        .reply-btn {
+            background: #99cc00;
+        }
+        .edit-btn {
+            background: #44aaff;
+        }
+        .delete-btn {
+            background: #ff6666;
+        }
+        .like-btn {
+            background: #f5f5f5;
+            color: #666;
+        }
+        .like-btn.active {
+            background: linear-gradient(135deg, #ff4444, #cc0000);
+            color: white;
+        }
+        .like-btn::before {
+            content: "❤️";
+            margin-right: 3px;
+        }
+        /* 回复输入框 */
+        .reply-input-container {
+            margin: 8px 0 12px;
+            display: flex;
+            gap: 10px;
+        }
+        .reply-input {
+            flex: 1;
+            padding: 6px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 13px;
+        }
+        .reply-submit {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 6px;
+            background: #ff0000;
+            color: white;
+            font-size: 13px;
+            cursor: pointer;
+        }
+        /* 主评论输入框 */
+        .comment-input-container {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .comment-input {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        .submit-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            background: #ff0000;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        /* 自由发言区 */
+        .final-topic {
+            background: #fff8e1;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .final-topic h2 {
+            color: #ff0000;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        /* 媒体专区样式 */
+        .upload-area {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .upload-area h2 {
+            color: #ff0000;
+            font-size: 19px;
+            margin-bottom: 15px;
+            border-left: 4px solid #ff0000;
+            padding-left: 10px;
+        }
+        .upload-form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+        }
+        .upload-input {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        .file-input {
+            padding: 6px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        .upload-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            background: #0066cc;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        /* 上传进度条 */
+        .progress-container {
+            width: 100%;
+            height: 8px;
+            background: #eee;
+            border-radius: 4px;
+            margin-top: 10px;
+            overflow: hidden;
+            display: none;
+        }
+        .progress-bar {
+            height: 100%;
+            background: #0066cc;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        .upload-tip {
+            color: #666;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        .media-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .media-card {
+            width: calc(33.333% - 14px);
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            cursor: pointer;
+        }
+        .media-container {
+            width: 100%;
+            height: 200px;
+            position: relative;
+        }
+        .media-container img, .media-container video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .video-play-btn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 40px;
+            height: 40px;
+            background: rgba(0,0,0,0.6);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            cursor: pointer;
+        }
+        .media-info {
+            padding: 15px;
+        }
+        .media-author {
+            color: #ff0000;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+        .media-content {
+            margin: 10px 0;
+            line-height: 1.5;
+        }
+        .media-time {
+            font-size: 12px;
+            color: #999;
+            margin-bottom: 10px;
+            display: block;
+        }
+        .media-actions {
+            text-align: right;
+        }
+        /* 媒体放大预览层 */
+        .media-preview {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 9999;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+        }
+        .preview-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 80%;
+        }
+        .preview-img {
+            max-width: 100%;
+            max-height: 80vh;
+            cursor: move;
+            transition: transform 0.2s ease;
+            transform-origin: center;
+        }
+        .preview-video {
+            width: 100%;
+            max-height: 80vh;
+        }
+        /* 预览控制栏 */
+        .preview-controls {
+            position: absolute;
+            bottom: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            color: white;
+        }
+        .preview-btn {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            border-radius: 4px;
+            padding: 6px 12px;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .close-preview {
+            position: absolute;
+            top: -30px;
+            right: 0;
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 5px;
+        }
+        /* 图片缩放控制 */
+        .zoom-controls {
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: flex;
+            gap: 10px;
+            background: rgba(0,0,0,0.5);
+            padding: 8px;
+            border-radius: 0 0 8px 0;
+        }
+        .zoom-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 4px;
+            border: none;
+            background: rgba(255,255,255,0.3);
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        /* 响应式适配 */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 22px;
+            }
+            .topic, .final-topic, .upload-area {
+                padding: 15px;
+            }
+            .comment-input-container, .upload-form, .reply-input-container {
+                flex-wrap: wrap;
+                align-items: stretch;
+            }
+            .submit-btn, .upload-btn, .reply-submit {
+                width: 100%;
+                margin-top: 5px;
+            }
+            .comment, .tabs {
+                flex-wrap: wrap;
+            }
+            .comment-actions {
+                margin-left: 0;
+                margin-top: 8px;
+                width: 100%;
+                justify-content: flex-end;
+            }
+            .media-card {
+                width: calc(50% - 10px);
+            }
+            .media-container {
+                height: 150px;
+            }
+            .tab {
+                padding: 8px 12px;
+                font-size: 14px;
+            }
+            .preview-controls {
+                flex-wrap: wrap;
+                justify-content: center;
+                bottom: -60px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 实名弹窗 -->
+    <div class="auth-modal" id="auth-modal" style="display:none">
+        <div class="auth-form">
+            <h2>请输入你的名字</h2>
+            <input type="text" id="user-name" placeholder="例如：张三" required>
+            <button onclick="confirmAuth()">确认进入</button>
+        </div>
+    </div>
+
+    <!-- 顶部状态栏 -->
+    <div class="top-bar">
+        <div class="current-user" id="current-user"></div>
+        <div class="admin-login">
+            <input type="password" id="admin-pwd" placeholder="管理员密码">
+            <button onclick="adminLogin()">管理员登录</button>
+        </div>
+    </div>
+
+    <h1>‼️你收到了一封来自【沂水二中】的邀请函</h1>
+    <h4>💬Hello,欢迎来到我们的回忆录！</h4>
+    <h3 style="color:#ff0000;">「无法预知的瞬间，才变成了永久的回忆」</h3>
+    <p>各位22级二中的同学们大家好！天气转凉，又到了思念的季节，毕业已数月有余，各位同学在天南海北生活的怎么样呢？无论是迈入大学生涯还是选择再战一年，我们和二中都有些距离了，那么各位还想念在二中的日子吗？对二中还有什么记忆呢？在这个电子回忆录里分享你的想法吧！</p>
+    
+    <div class="warning">
+        ⚠️不要人身攻击，不要吵架，有序和谐记录，感谢各位校友的参与～欢迎分享出去我们一起分享回忆^w^
+    </div>
+
+
+    <!-- 标签页容器 -->
+    <div class="tab-container">
+        <div class="tabs">
+            <button class="tab active" data-target="tab-memories">青春记忆</button>
+            <button class="tab" data-target="tab-media">媒体专区</button>
+            <button class="tab" data-target="tab-free">自由发言</button>
+        </div>
+
+        <!-- 青春记忆标签页 -->
+        <div id="tab-memories" class="tab-content active">
+            <div class="warning">
+                温馨提示：请文明发言，尊重他人，共同维护美好的回忆空间。
+            </div>
+
+            <!-- 话题1 -->
+            <div class="topic">
+                <h2>话题1：还记得第一次踏进二中校门的情景吗？</h2>
+                <div class="rule">
+                    <p>📝 分享你的入学第一印象，那时的你是什么心情？</p>
+                </div>
+                <div id="comment-list-1"></div>
+                <div class="comment-input-container">
+                    <input type="text" id="comment-input-1" class="comment-input" placeholder="写下你的回忆...">
+                    <button class="submit-btn" data-topic="1" onclick="submitComment(1)">提交</button>
+                </div>
+            </div>
+
+            <!-- 话题2 -->
+            <div class="topic">
+                <h2>话题2：高中生涯中让你印象最深刻的老师是?ta有什么口头禅/招牌动作?又或者做过什么事情?</h2>
+                <div class="rule">
+                    <p>👨‍🏫 分享老师们的经典语录或感人瞬间</p>
+                </div>
+                <div id="comment-list-2"></div>
+                <div class="comment-input-container">
+                    <input type="text" id="comment-input-2" class="comment-input" placeholder="分享你的故事...">
+                    <button class="submit-btn" data-topic="2" onclick="submitComment(2)">提交</button>
+                </div>
+            </div>
+
+            <!-- 话题3 -->
+            <div class="topic">
+                <h2>话题3：校园里最喜欢的地方是哪里？</h2>
+                <div class="rule">
+                    <p>🏫 你恋恋不舍之地</p>
+                </div>
+                <div id="comment-list-3"></div>
+                <div class="comment-input-container">
+                    <input type="text" id="comment-input-3" class="comment-input" placeholder="分享你的故事...">
+                    <button class="submit-btn" data-topic="3" onclick="submitComment(3)">提交</button>
+                </div>
+            </div>
+
+            <!-- 话题4 -->
+            <div class="topic">
+                <h2>话题4：说说最食堂饭菜</h2>
+                <div class="rule">
+                    <p></p>
+                </div>
+                <div id="comment-list-4"></div>
+                <div class="comment-input-container">
+                    <input type="text" id="comment-input-4" class="comment-input" placeholder="分享你的故事...">
+                    <button class="submit-btn" data-topic="4" onclick="submitComment(4)">提交</button>
+                </div>
+            </div>
+
+            <!-- 话题6 -->
+            <div class="topic">
+                <h2>话题6：讲讲最让你印象深刻/怀念的同学</h2>
+                <div class="rule">
+                    <p>👫 分享你们的友谊故事和难忘瞬间</p>
+                </div>
+                <div id="comment-list-6"></div>
+                <div class="comment-input-container">
+                    <input type="text" id="comment-input-6" class="comment-input" placeholder="分享你的故事...">
+                    <button class="submit-btn" data-topic="6" onclick="submitComment(6)">提交</button>
+                </div>
+            </div>
+
+            <!-- 话题8 -->
+            <div class="topic">
+                <h2>话题8：你印象最深的那节课</h2>
+                <div class="rule">
+                    <p>📚 哪堂课让你印象深刻？为什么？</p>
+                </div>
+                <div id="comment-list-8"></div>
+                <div class="comment-input-container">
+                    <input type="text" id="comment-input-8" class="comment-input" placeholder="分享你的故事...">
+                    <button class="submit-btn" data-topic="8" onclick="submitComment(8)">提交</button>
+                </div>
+            </div>
+
+            <!-- 话题9 -->
+            <div class="topic">
+                <h2>话题9：高中你做过最牛逼的事是什么？</h2>
+                <div class="rule">
+                    <p>展示实力</p>
+                </div>
+                <div id="comment-list-9"></div>
+                <div class="comment-input-container">
+                    <input type="text" id="comment-input-9" class="comment-input" placeholder="分享你的故事...">
+                    <button class="submit-btn" data-topic="9" onclick="submitComment(9)">提交</button>
+                </div>
+            </div>
+
+            <!-- 话题10 -->
+            <div class="topic">
+                <h2>话题10：聊聊最快乐的那个瞬间/那天</h2>
+                <div class="rule">
+                    <p>😂 分享那些让你难忘的瞬间</p>
+                </div>
+                <div id="comment-list-10"></div>
+                <div class="comment-input-container">
+                    <input type="text" id="comment-input-10" class="comment-input" placeholder="分享你的故事...">
+                    <button class="submit-btn" data-topic="10" onclick="submitComment(10)">提交</button>
+                </div>
+            </div>
+
+            <!-- 话题11 -->
+            <div class="topic">
+                <h2>话题11：给学弟学妹的一句话建议</h2>
+                <div class="rule">
+                    <p>💡 用你的经验为后来者点亮前行的路</p>
+                </div>
+                <div id="comment-list-11"></div>
+                <div class="comment-input-container">
+                    <input type="text" id="comment-input-11" class="comment-input" placeholder="分享你的建议...">
+                    <button class="submit-btn" data-topic="11" onclick="submitComment(11)">提交</button>
+                </div>
+            </div>
+
+            <!-- 话题12 -->
+            <div class="topic">
+                <h2>话题12：如果重回高中，你最想做什么？</h2>
+                <div class="rule">
+                    <p>🕰️ 分享你的遗憾或未完成的梦想</p>
+                </div>
+                <div id="comment-list-12"></div>
+                <div class="comment-input-container">
+                    <input type="text" id="comment-input-12" class="comment-input" placeholder="分享你的想法...">
+                    <button class="submit-btn" data-topic="12" onclick="submitComment(12)">提交</button>
+                </div>
+            </div>
+
+            <!-- 话题13 -->
+            <div class="topic">
+                <h2>话题13：对过去与现在的感受</h2>
+                <div class="rule">
+                    <p>🎓 分享毕业时的心情和想对大家说的话，你们在大学过的好吗？<br>
+                        大家都去哪里了，那里怎么样？大学生活和你们高中时候想的一样吗？</p>
+                </div>
+                <div id="comment-list-13"></div>
+                <div class="comment-input-container">
+                    <input type="text" id="comment-input-13" class="comment-input" placeholder="分享你的感受...">
+                    <button class="submit-btn" data-topic="13" onclick="submitComment(13)">提交</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 媒体专区标签页 -->
+        <div id="tab-media" class="tab-content">
+            <div class="warning">
+                支持上传图片和视频，与大家分享美好瞬间（单文件不超过10MB）
+            </div>
+
+            <div class="upload-area">
+                <h2>上传图片或视频</h2>
+                <div class="upload-form">
+                    <input type="text" id="media-content" class="upload-input" placeholder="说点什么...">
+                    <input type="file" id="media-file" class="file-input" accept="image/*,video/*">
+                    <button class="upload-btn" onclick="uploadMedia()">上传图文/视频</button>
+                </div>
+                <div class="progress-container" id="progress-container">
+                    <div class="progress-bar" id="upload-progress"></div>
+                </div>
+                <div class="upload-tip">支持 JPG、PNG 图片和 MP4、WEBM 视频格式</div>
+            </div>
+
+            <h3>📸 班级回忆相册</h3>
+            <div class="media-list" id="media-list"></div>
+        </div>
+
+        <!-- 自由发言标签页 -->
+        <div id="tab-free" class="tab-content">
+            <div class="final-topic">
+                <h2>💬 自由发言区</h2>
+                <div class="rule">
+                    <p>✨ 任何想说的话、想分享的故事，都可以在这里畅所欲言</p>
+                    <p>💌 给老同学的留言、近况分享、未来展望...</p>
+                </div>
+                <div id="comment-list-free"></div>
+                <div class="comment-input-container">
+                    <input type="text" id="comment-input-free" class="comment-input" placeholder="畅所欲言...">
+                    <button class="submit-btn" data-topic="free" onclick="submitComment('free')">提交</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 媒体预览层 -->
+    <div class="media-preview" id="media-preview">
+        <button class="close-preview" onclick="closeMediaPreview()">×</button>
+        <div class="preview-content" id="preview-content"></div>
+        <div class="preview-controls">
+            <button class="preview-btn" onclick="downloadMedia()">📥 下载</button>
+        </div>
+        <div class="zoom-controls" id="zoom-controls" style="display:none">
+            <button class="zoom-btn" onclick="zoomImg(-0.1)">-</button>
+            <button class="zoom-btn" onclick="zoomImg(0.1)">+</button>
+            <button class="zoom-btn" onclick="resetImgZoom()">⟳</button>
+        </div>
+    </div>
+
+    <script>
+        // 全局状态
+        let userName = localStorage.getItem('user_name');
+        let isAdmin = false;
+        const ADMIN_PWD = "admin123";
+        const COMMENT_KEY = "yishui22_comments";
+        const MEDIA_KEY = "yishui22_media";
+        let editMediaId = '';
+        // 媒体预览状态
+        let currentPreviewMedia = null;
+        let imgScale = 1;
+        let isDragging = false;
+        let startX = 0, startY = 0, imgX = 0, imgY = 0;
+        let currentReplyId = '';
+
+        // 页面加载初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            try {
+                if (!userName) {
+                    showAuthModal();
+                } else {
+                    initPage();
+                }
+            } catch (err) {
+                console.error('初始化失败：', err);
+                alert('页面加载异常，请刷新重试');
+            }
+        });
+
+        // 显示实名弹窗
+        function showAuthModal() {
+            try {
+                const modal = document.getElementById('auth-modal');
+                if (modal) {
+                    modal.style.display = 'flex';
+                    
+                    // 绑定回车事件
+                    const nameInput = document.getElementById('user-name');
+                    if (nameInput) {
+                        nameInput.focus();
+                        nameInput.addEventListener('keydown', function(e) {
+                            if (e.key === 'Enter') {
+                                confirmAuth();
+                            }
+                        });
+                    }
+                }
+            } catch (err) {
+                console.error('显示实名弹窗失败：', err);
+            }
+        }
+
+        // 确认实名
+        function confirmAuth() {
+            try {
+                const nameInput = document.getElementById('user-name');
+                if (!nameInput) throw new Error('未找到名字输入框');
+                
+                const name = nameInput.value.trim();
+                if (!name) {
+                    alert('请输入有效的名字！');
+                    return;
+                }
+                
+                userName = name;
+                localStorage.setItem('user_name', userName);
+                
+                const modal = document.getElementById('auth-modal');
+                if (modal) modal.style.display = 'none';
+                
+                initPage();
+            } catch (err) {
+                console.error('实名确认失败：', err);
+                alert('操作异常，请重试');
+            }
+        }
+
+        // 初始化页面
+        function initPage() {
+            try {
+                // 显示当前用户
+                const currentUserEl = document.getElementById('current-user');
+                if (currentUserEl) {
+                    currentUserEl.innerHTML = `当前登录：<span>${userName}</span>`;
+                }
+                
+                // 初始化标签页
+                initTabs();
+                
+                // 初始化评论
+                initComments();
+                
+                // 初始化媒体列表
+                loadMediaList();
+                
+                // 绑定回车提交
+                [1,2,3,4,6,8,9,10,11,12,13,'free'].forEach(id => bindEnterSubmit(id));
+                
+                // 绑定媒体上传事件
+                bindMediaUploadEvents();
+            } catch (err) {
+                console.error('页面初始化失败：', err);
+            }
+        }
+
+        // 初始化标签页
+        function initTabs() {
+            try {
+                const tabs = document.querySelectorAll('.tab');
+                tabs.forEach(tab => {
+                    tab.addEventListener('click', () => {
+                        tabs.forEach(t => t.classList.remove('active'));
+                        tab.classList.add('active');
+                        
+                        const target = tab.getAttribute('data-target');
+                        document.querySelectorAll('.tab-content').forEach(content => {
+                            content.classList.remove('active');
+                        });
+                        
+                        const targetContent = document.getElementById(target);
+                        if (targetContent) targetContent.classList.add('active');
+                    });
+                });
+            } catch (err) {
+                console.error('标签页初始化失败：', err);
+            }
+        }
+
+        // 管理员登录
+        function adminLogin() {
+            try {
+                const pwdInput = document.getElementById('admin-pwd');
+                if (!pwdInput) return;
+                
+                const pwd = pwdInput.value;
+                if (pwd === ADMIN_PWD) {
+                    isAdmin = true;
+                    alert('管理员登录成功！');
+                    
+                    const adminLoginEl = document.querySelector('.admin-login');
+                    if (adminLoginEl) adminLoginEl.style.display = 'none';
+                    
+                    // 重新初始化以显示删除按钮
+                    initComments();
+                    loadMediaList();
+                } else {
+                    alert('密码错误！');
+                    pwdInput.value = '';
+                }
+            } catch (err) {
+                console.error('管理员登录失败：', err);
+            }
+        }
+
+        // ---------------------- 评论相关 ----------------------
+        function initComments() {
+            try {
+                const savedComments = JSON.parse(localStorage.getItem(COMMENT_KEY) || '{}');
+                const topicIds = [1,2,3,4,6,8,9,10,11,12,13,'free'];
+                
+                topicIds.forEach(topicId => {
+                    const listEl = document.getElementById(`comment-list-${topicId}`);
+                    if (!listEl) return;
+                    
+                    let comments = savedComments[topicId] || [];
+                    comments.sort((a,b) => (a.time || 0) - (b.time || 0));
+                    listEl.innerHTML = '';
+
+                    // 扁平化所有评论（包括回复）
+                    const flatComments = [];
+                    comments.forEach(cmt => {
+                        flatComments.push({...cmt, level: 0});
+                        if (cmt.replies && cmt.replies.length > 0) {
+                            flattenReplies(cmt.replies, flatComments, cmt.id, cmt.author);
+                        }
+                    });
+
+                    // 分组渲染
+                    const commentGroups = [];
+                    while (flatComments.length > 0) {
+                        commentGroups.push(flatComments.splice(0, 5));
+                    }
+
+                    commentGroups.forEach((group, groupIndex) => {
+                        const groupDiv = document.createElement('div');
+                        groupDiv.className = 'comment-group';
+
+                        if (commentGroups.length > 1 && groupIndex > 0) {
+                            const collapseBtn = document.createElement('button');
+                            collapseBtn.className = 'collapse-btn';
+                            collapseBtn.innerHTML = `▼ 显示 ${group.length} 条评论`;
+                            collapseBtn.onclick = () => {
+                                const contentDiv = groupDiv.querySelector('.group-content');
+                                if (contentDiv) toggleCollapse(collapseBtn, contentDiv);
+                            };
+                            groupDiv.appendChild(collapseBtn);
+                        }
+
+                        const contentDiv = document.createElement('div');
+                        contentDiv.className = 'group-content';
+                        if (groupIndex > 0) contentDiv.style.display = 'none';
+
+                        // 渲染每条评论
+                        group.forEach(cmt => {
+                            const commentContainer = document.createElement('div');
+                            commentContainer.className = `comment-container`;
+                            
+                            const cmtDiv = document.createElement('div');
+                            // 如果是回复，添加特殊样式类
+                            cmtDiv.className = `comment ${cmt.parentId ? 'reply-comment' : ''}`;
+                            cmtDiv.id = cmt.id;
+                            cmtDiv.setAttribute('data-author', cmt.author);
+                            cmtDiv.setAttribute('data-topic', topicId);
+                            if (cmt.parentId) cmtDiv.setAttribute('data-parent', cmt.parentId);
+                            
+                            let contentHtml = '';
+                            // 如果是回复，显示回复标记
+                            if (cmt.parentId) {
+                                const parentCmt = findCommentById(cmt.parentId, topicId);
+                                if (parentCmt) {
+                                    contentHtml += `<span class="reply-to">回复 @${parentCmt.author}：${parentCmt.content || ''}</span>`;
+                                } else {
+                                    contentHtml += `<span class="reply-to">回复 @已删除的评论</span>`;
+                                }
+                            }
+                            
+                            contentHtml += `
+                                <div class="comment-content">
+                                    <span class="comment-author">${cmt.author || '匿名用户'}：</span>
+                                    <span>${cmt.content || ''}</span>
+                                    <span class="comment-time">${formatTime(cmt.time || Date.now())}</span>
+                                </div>
+                                <div class="comment-actions">
+                                    <button class="action-btn like-btn ${cmt.isLiked ? 'active' : ''}" onclick="toggleLike(this)">点赞(${cmt.like || 0})</button>
+                                    <button class="action-btn reply-btn" onclick="showReplyInput('${cmt.id}', '${cmt.author || '匿名用户'}', ${typeof topicId === 'string' ? `'${topicId}'` : topicId})">回复</button>
+                                    <button class="action-btn edit-btn" onclick="editComment('${cmt.id}', ${typeof topicId === 'string' ? `'${topicId}'` : topicId})">编辑</button>
+                                    <button class="action-btn delete-btn" style="display:${isAdmin || (cmt.author === userName) ? 'inline-block' : 'none'}" onclick="deleteComment('${cmt.id}', ${typeof topicId === 'string' ? `'${topicId}'` : topicId})">删除</button>
+                                </div>
+                            `;
+                            
+                            cmtDiv.innerHTML = contentHtml;
+                            commentContainer.appendChild(cmtDiv);
+                            contentDiv.appendChild(commentContainer);
+                        });
+
+                        groupDiv.appendChild(contentDiv);
+                        listEl.appendChild(groupDiv);
+                    });
+                });
+            } catch (err) {
+                console.error('评论初始化失败：', err);
+            }
+        }
+
+        // 格式化时间
+        function formatTime(timestamp) {
+            const date = new Date(timestamp);
+            const now = new Date();
+            const diff = now - date;
+            
+            // 如果是今天内
+            if (date.toDateString() === now.toDateString()) {
+                if (diff < 60000) return '刚刚';
+                if (diff < 3600000) return `${Math.floor(diff/60000)}分钟前`;
+                return `${Math.floor(diff/3600000)}小时前`;
+            }
+            
+            // 如果是昨天
+            const yesterday = new Date(now);
+            yesterday.setDate(yesterday.getDate() - 1);
+            if (date.toDateString() === yesterday.toDateString()) {
+                return `昨天 ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
+            }
+            
+            // 其他情况
+            return date.toLocaleString();
+        }
+
+        // 扁平化回复 - 修改为独立评论
+        function flattenReplies(replies, result, parentId, parentAuthor) {
+            if (!replies || replies.length === 0) return;
+            replies.forEach(reply => {
+                // 将回复作为独立评论添加到结果中
+                result.push({
+                    ...reply,
+                    parentId: parentId,
+                    parentAuthor: parentAuthor
+                });
+                // 递归处理嵌套回复
+                if (reply.replies && reply.replies.length > 0) {
+                    flattenReplies(reply.replies, result, reply.id, reply.author);
+                }
+            });
+        }
+
+        // 折叠/展开评论组
+        function toggleCollapse(btn, contentDiv) {
+            try {
+                const isHidden = contentDiv.style.display === 'none';
+                contentDiv.style.display = isHidden ? 'block' : 'none';
+                btn.innerHTML = isHidden ? `▲ 收起评论` : `▼ 显示 ${contentDiv.querySelectorAll('.comment-container').length} 条评论`;
+            } catch (err) {
+                console.error('折叠评论失败：', err);
+            }
+        }
+
+        // 显示回复输入框
+        function showReplyInput(parentId, parentAuthor, topicId) {
+            try {
+                // 移除现有回复框
+                document.querySelectorAll('.reply-input-container').forEach(el => {
+                    if (el.parentNode) el.parentNode.removeChild(el);
+                });
+                currentReplyId = parentId;
+                
+                const replyInput = createReplyInput(parentId, parentAuthor, topicId);
+                const commentContainer = document.getElementById(parentId)?.closest('.comment-container');
+                
+                if (commentContainer) {
+                    commentContainer.appendChild(replyInput);
+                    const input = replyInput.querySelector('.reply-input');
+                    if (input) input.focus();
+                }
+            } catch (err) {
+                console.error('显示回复框失败：', err);
+            }
+        }
+
+        // 创建回复输入框
+        function createReplyInput(parentId, parentAuthor, topicId) {
+            const container = document.createElement('div');
+            container.className = 'reply-input-container';
+            container.innerHTML = `
+                <input type="text" class="reply-input" placeholder="回复 @${parentAuthor}...">
+                <button class="reply-submit" onclick="submitReply('${parentId}', ${typeof topicId === 'string' ? `'${topicId}'` : topicId})">发送</button>
+            `;
+            
+            const input = container.querySelector('.reply-input');
+            if (input) {
+                input.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') submitReply(parentId, topicId);
+                });
+            }
+            
+            return container;
+        }
+
+        // 提交回复 - 修改为独立评论
+        function submitReply(parentId, topicId) {
+            try {
+                const input = document.querySelector('.reply-input-container .reply-input');
+                if (!input) return;
+                
+                const content = input.value.trim();
+                if (!content) {
+                    alert('请输入回复内容！');
+                    return;
+                }
+
+                const savedComments = JSON.parse(localStorage.getItem(COMMENT_KEY) || '{}');
+                if (!savedComments[topicId]) savedComments[topicId] = [];
+
+                const parentCmt = findCommentById(parentId, topicId);
+                
+                // 创建回复作为独立评论
+                const replyData = {
+                    id: `cmt-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+                    author: userName,
+                    content: content,
+                    time: Date.now(),
+                    like: 0,
+                    isLiked: false,
+                    parentId: parentId, // 标记这是回复
+                    parentAuthor: parentCmt ? parentCmt.author : '未知用户',
+                    level: 0, // 所有评论都是顶级
+                    replies: [] // 清空嵌套回复
+                };
+
+                // 直接添加到评论列表
+                savedComments[topicId].push(replyData);
+
+                savedComments[topicId].sort((a,b) => (a.time || 0) - (b.time || 0));
+                localStorage.setItem(COMMENT_KEY, JSON.stringify(savedComments));
+                initComments();
+                currentReplyId = '';
+            } catch (err) {
+                console.error('提交回复失败：', err);
+                alert('回复失败，请重试');
+            }
+        }
+
+        // 查找评论
+        function findCommentById(commentId, topicId, comments = null) {
+            try {
+                const savedComments = comments || JSON.parse(localStorage.getItem(COMMENT_KEY) || '{}')[topicId] || [];
+                for (const cmt of savedComments) {
+                    if (cmt.id === commentId) return cmt;
+                    if (cmt.replies && cmt.replies.length > 0) {
+                        const found = findCommentById(commentId, topicId, cmt.replies);
+                        if (found) return found;
+                    }
+                }
+                return null;
+            } catch (err) {
+                console.error('查找评论失败：', err);
+                return null;
+            }
+        }
+
+        // 提交主评论
+        function submitComment(topicId, editId = '') {
+            try {
+                const input = document.getElementById(`comment-input-${topicId}`);
+                if (!input) return;
+                
+                const content = input.value.trim();
+                if (!content) {
+                    alert('请输入评论内容！');
+                    return;
+                }
+
+                const savedComments = JSON.parse(localStorage.getItem(COMMENT_KEY) || '{}');
+                if (!savedComments[topicId]) savedComments[topicId] = [];
+
+                const existingComment = editId ? findCommentById(editId, topicId) : null;
+                const commentData = {
+                    id: editId || `cmt-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+                    author: userName,
+                    content: content,
+                    time: editId ? (existingComment?.time || Date.now()) : Date.now(),
+                    like: editId ? (existingComment?.like || 0) : 0,
+                    isLiked: editId ? (existingComment?.isLiked || false) : false,
+                    level: 0,
+                    replies: editId ? (existingComment?.replies || []) : []
+                };
+
+                if (editId) {
+                    replaceCommentById(editId, topicId, commentData, savedComments[topicId]);
+                } else {
+                    savedComments[topicId].push(commentData);
+                }
+
+                savedComments[topicId].sort((a,b) => (a.time || 0) - (b.time || 0));
+                localStorage.setItem(COMMENT_KEY, JSON.stringify(savedComments));
+                initComments();
+                
+                input.value = '';
+                const btn = document.querySelector(`.comment-input-container [data-topic="${topicId}"]`);
+                if (btn) {
+                    btn.innerText = '提交';
+                    btn.onclick = () => submitComment(topicId);
+                }
+            } catch (err) {
+                console.error('提交评论失败：', err);
+                alert('提交失败，请重试');
+            }
+        }
+
+        // 替换评论
+        function replaceCommentById(commentId, topicId, newComment, comments) {
+            for (let i = 0; i < comments.length; i++) {
+                if (comments[i].id === commentId) {
+                    comments[i] = newComment;
+                    return true;
+                }
+                if (comments[i].replies && comments[i].replies.length > 0) {
+                    const replaced = replaceCommentById(commentId, topicId, newComment, comments[i].replies);
+                    if (replaced) return true;
+                }
+            }
+            return false;
+        }
+
+        // 编辑评论
+        function editComment(cmtId, topicId) {
+            try {
+                const cmt = findCommentById(cmtId, topicId);
+                if (!cmt || (cmt.author !== userName && !isAdmin)) {
+                    alert('无权限编辑！');
+                    return;
+                }
+
+                if (cmt.parentId) {
+                    // 编辑回复评论
+                    const parentAuthor = findCommentById(cmt.parentId, topicId)?.author || '';
+                    showReplyInput(cmt.parentId, parentAuthor, topicId);
+                    
+                    const input = document.querySelector('.reply-input-container .reply-input');
+                    if (input) input.value = cmt.content;
+                    
+                    const submitBtn = document.querySelector('.reply-submit');
+                    if (submitBtn) {
+                        submitBtn.onclick = () => submitEditReply(cmtId, cmt.parentId, topicId);
+                    }
+                } else {
+                    // 编辑主评论
+                    const input = document.getElementById(`comment-input-${topicId}`);
+                    if (input) {
+                        input.value = cmt.content;
+                        input.focus();
+                        
+                        const btn = document.querySelector(`.comment-input-container [data-topic="${topicId}"]`);
+                        if (btn) {
+                            btn.innerText = '保存';
+                            btn.onclick = () => submitComment(topicId, cmtId);
+                        }
+                    }
+                }
+            } catch (err) {
+                console.error('编辑评论失败：', err);
+                alert('编辑失败，请重试');
+            }
+        }
+
+        // 提交编辑回复
+        function submitEditReply(cmtId, parentId, topicId) {
+            try {
+                const input = document.querySelector('.reply-input-container .reply-input');
+                if (!input) return;
+                
+                const content = input.value.trim();
+                if (!content) {
+                    alert('请输入回复内容！');
+                    return;
+                }
+
+                const savedComments = JSON.parse(localStorage.getItem(COMMENT_KEY) || '{}');
+                const cmt = findCommentById(cmtId, topicId);
+                if (cmt) cmt.content = content;
+
+                localStorage.setItem(COMMENT_KEY, JSON.stringify(savedComments));
+                initComments();
+                currentReplyId = '';
+            } catch (err) {
+                console.error('提交编辑回复失败：', err);
+                alert('修改失败，请重试');
+            }
+        }
+
+        // 删除评论
+        function deleteComment(cmtId, topicId) {
+            try {
+                if (!confirm('确定删除吗？')) return;
+                
+                const savedComments = JSON.parse(localStorage.getItem(COMMENT_KEY) || '{}');
+                
+                function removeCommentById(id, comments) {
+                    for (let i = 0; i < comments.length; i++) {
+                        if (comments[i].id === id) {
+                            comments.splice(i, 1);
+                            return true;
+                        }
+                        if (comments[i].replies && comments[i].replies.length > 0) {
+                            const removed = removeCommentById(id, comments[i].replies);
+                            if (removed) return true;
+                        }
+                    }
+                    return false;
+                }
+
+                if (savedComments[topicId]) {
+                    removeCommentById(cmtId, savedComments[topicId]);
+                    localStorage.setItem(COMMENT_KEY, JSON.stringify(savedComments));
+                    initComments();
+                }
+            } catch (err) {
+                console.error('删除评论失败：', err);
+                alert('删除失败，请重试');
+            }
+        }
+
+        // 点赞切换
+        function toggleLike(btn) {
+            try {
+                const cmtEl = btn.closest('.comment');
+                if (!cmtEl) return;
+                
+                const cmtId = cmtEl.id;
+                const topicId = cmtEl.getAttribute('data-topic');
+                const cmt = findCommentById(cmtId, topicId);
+                if (!cmt) return;
+
+                cmt.isLiked = !cmt.isLiked;
+                cmt.like = (cmt.like || 0) + (cmt.isLiked ? 1 : -1);
+                if (cmt.like < 0) cmt.like = 0;
+                
+                const savedComments = JSON.parse(localStorage.getItem(COMMENT_KEY) || '{}');
+                localStorage.setItem(COMMENT_KEY, JSON.stringify(savedComments));
+                
+                btn.classList.toggle('active');
+                btn.innerText = `点赞(${cmt.like || 0})`;
+            } catch (err) {
+                console.error('点赞失败：', err);
+            }
+        }
+
+        // 绑定回车提交
+        function bindEnterSubmit(topicId) {
+            try {
+                const input = document.getElementById(`comment-input-${topicId}`);
+                if (input) {
+                    input.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter') submitComment(topicId);
+                    });
+                }
+            } catch (err) {
+                console.error('绑定回车提交失败：', err);
+            }
+        }
+
+        // ---------------------- 媒体相关 ----------------------
+        // 绑定图片拖动缩放事件
+        function bindImgDragZoomEvents() {
+            try {
+                const previewContent = document.getElementById('preview-content');
+                if (!previewContent) return;
+                
+                // 鼠标按下
+                previewContent.addEventListener('mousedown', (e) => {
+                    const target = e.target;
+                    if (target.classList.contains('preview-img')) {
+                        isDragging = true;
+                        startX = e.clientX;
+                        startY = e.clientY;
+                        const rect = target.getBoundingClientRect();
+                        imgX = rect.left;
+                        imgY = rect.top;
+                        target.style.cursor = 'grabbing';
+                        e.preventDefault();
+                    }
+                });
+                
+                // 鼠标移动
+                document.addEventListener('mousemove', (e) => {
+                    if (!isDragging) return;
+                    
+                    const previewImg = document.querySelector('.preview-img');
+                    if (!previewImg) return;
+                    
+                    const dx = e.clientX - startX;
+                    const dy = e.clientY - startY;
+                    previewImg.style.position = 'relative';
+                    previewImg.style.left = `${imgX + dx}px`;
+                    previewImg.style.top = `${imgY + dy}px`;
+                });
+                
+                // 鼠标松开
+                document.addEventListener('mouseup', () => {
+                    isDragging = false;
+                    const previewImg = document.querySelector('.preview-img');
+                    if (previewImg) previewImg.style.cursor = 'move';
+                });
+                
+                // 滚轮缩放
+                previewContent.addEventListener('wheel', (e) => {
+                    const previewImg = document.querySelector('.preview-img');
+                    if (!previewImg) return;
+                    
+                    e.preventDefault();
+                    const delta = e.deltaY > 0 ? -0.1 : 0.1;
+                    zoomImg(delta);
+                });
+            } catch (err) {
+                console.error('绑定图片拖动缩放事件失败：', err);
+            }
+        }
+
+        // 图片缩放
+        function zoomImg(delta) {
+            try {
+                const previewImg = document.querySelector('.preview-img');
+                if (!previewImg) return;
+                
+                imgScale += delta;
+                imgScale = Math.max(0.5, Math.min(imgScale, 3));
+                previewImg.style.transform = `scale(${imgScale})`;
+            } catch (err) {
+                console.error('图片缩放失败：', err);
+            }
+        }
+
+        // 重置图片缩放和位置
+        function resetImgZoom() {
+            try {
+                const previewImg = document.querySelector('.preview-img');
+                if (!previewImg) return;
+                
+                imgScale = 1;
+                previewImg.style.transform = 'scale(1)';
+                previewImg.style.left = '0';
+                previewImg.style.top = '0';
+            } catch (err) {
+                console.error('重置图片失败：', err);
+            }
+        }
+
+        // 绑定媒体上传事件
+        function bindMediaUploadEvents() {
+            try {
+                const mediaContentInput = document.getElementById('media-content');
+                if (mediaContentInput) {
+                    mediaContentInput.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter') uploadMedia();
+                    });
+                }
+                
+                // 绑定图片拖动缩放事件
+                bindImgDragZoomEvents();
+            } catch (err) {
+                console.error('绑定媒体上传事件失败：', err);
+            }
+        }
+
+        // 加载媒体列表
+        function loadMediaList() {
+            try {
+                const savedMedia = JSON.parse(localStorage.getItem(MEDIA_KEY) || '[]');
+                savedMedia.sort((a,b) => (b.time || 0) - (a.time || 0)); // 按时间倒序
+                
+                const listEl = document.getElementById('media-list');
+                if (!listEl) return;
+                listEl.innerHTML = '';
+                
+                if (savedMedia.length === 0) {
+                    listEl.innerHTML = '<p style="text-align:center;color:#666;width:100%;padding:20px;">暂无媒体内容，快来上传第一张照片或视频吧！</p>';
+                    return;
+                }
+                
+                savedMedia.forEach(media => {
+                    const mediaCard = document.createElement('div');
+                    mediaCard.className = 'media-card';
+                    mediaCard.id = media.id;
+                    mediaCard.setAttribute('data-author', media.author);
+                    mediaCard.setAttribute('data-type', media.type);
+                    mediaCard.setAttribute('data-url', media.url);
+                    mediaCard.setAttribute('data-content', media.content);
+                    
+                    let mediaHtml = '';
+                    if (media.type === 'video') {
+                        mediaHtml = `
+                            <div class="media-container">
+                                <video src="${media.url}" preload="metadata">您的浏览器不支持视频播放</video>
+                                <div class="video-play-btn" onclick="toggleVideoPlay(this, event)">▶</div>
+                            </div>
+                        `;
+                    } else {
+                        mediaHtml = `
+                            <div class="media-container">
+                                <img src="${media.url}" alt="高中回忆" onerror="this.src='https://picsum.photos/seed/default/300/200'">
+                            </div>
+                        `;
+                    }
+                    
+                    mediaCard.innerHTML = mediaHtml + `
+                        <div class="media-info">
+                            <span class="media-author">${media.author || '匿名用户'}：</span>
+                            <span class="media-time">${formatTime(media.time || Date.now())}</span>
+                            <div class="media-content">${media.content || ''}</div>
+                            <div class="media-actions">
+                                <button class="action-btn edit-btn" onclick="editMedia('${media.id}', event)">编辑</button>
+                                <button class="action-btn delete-btn" style="display:${isAdmin || (media.author === userName) ? 'inline-block' : 'none'}" onclick="deleteMedia('${media.id}', event)">删除</button>
+                            </div>
+                        </div>
+                    `;
+                    
+                    // 绑定点击放大事件
+                    mediaCard.addEventListener('click', (e) => {
+                        if (e.target.closest('.action-btn') || e.target.closest('.video-play-btn')) return;
+                        openMediaPreview(media);
+                    });
+                    
+                    listEl.appendChild(mediaCard);
+                });
+            } catch (err) {
+                console.error('加载媒体列表失败：', err);
+            }
+        }
+
+        // 打开媒体预览
+        function openMediaPreview(media) {
+            try {
+                currentPreviewMedia = media;
+                const previewLayer = document.getElementById('media-preview');
+                const previewContent = document.getElementById('preview-content');
+                const zoomControls = document.getElementById('zoom-controls');
+                
+                if (!previewLayer || !previewContent) return;
+                
+                previewContent.innerHTML = '';
+                imgScale = 1;
+                
+                if (media.type === 'video') {
+                    zoomControls.style.display = 'none';
+                    const video = document.createElement('video');
+                    video.className = 'preview-video';
+                    video.src = media.url;
+                    video.controls = true;
+                    previewContent.appendChild(video);
+                } else {
+                    zoomControls.style.display = 'flex';
+                    const img = document.createElement('img');
+                    img.className = 'preview-img';
+                    img.src = media.url;
+                    img.onerror = () => {
+                        img.src = 'https://picsum.photos/seed/default/800/600';
+                    };
+                    img.style.transform = 'scale(1)';
+                    img.style.cursor = 'move';
+                    previewContent.appendChild(img);
+                }
+                
+                previewLayer.style.display = 'flex';
+            } catch (err) {
+                console.error('打开媒体预览失败：', err);
+                alert('预览失败，请重试');
+            }
+        }
+
+        // 关闭媒体预览
+        function closeMediaPreview() {
+            try {
+                const previewLayer = document.getElementById('media-preview');
+                if (previewLayer) previewLayer.style.display = 'none';
+                
+                const video = document.querySelector('.preview-video');
+                if (video) video.pause();
+                
+                currentPreviewMedia = null;
+                resetImgZoom();
+            } catch (err) {
+                console.error('关闭媒体预览失败：', err);
+            }
+        }
+
+        // 下载媒体
+        function downloadMedia() {
+            try {
+                if (!currentPreviewMedia) return;
+                
+                const a = document.createElement('a');
+                a.href = currentPreviewMedia.url;
+                
+                const ext = currentPreviewMedia.type === 'video' ? 'mp4' : 'jpg';
+                const fileName = `${currentPreviewMedia.author || '匿名用户'}_${new Date(currentPreviewMedia.time || Date.now()).toLocaleDateString().replace(/\//g, '-')}.${ext}`;
+                a.download = fileName;
+                
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            } catch (err) {
+                console.error('下载媒体失败：', err);
+                alert('下载失败，请重试');
+            }
+        }
+
+        // 视频播放/暂停
+        function toggleVideoPlay(btn, event) {
+            try {
+                event.stopPropagation();
+                const video = btn.closest('.media-container').querySelector('video');
+                if (!video) return;
+                
+                if (video.paused) {
+                    video.play().catch(err => {
+                        console.error('视频播放失败：', err);
+                        alert('视频播放失败，请检查浏览器设置或网络状态');
+                    });
+                    btn.innerHTML = '⏸';
+                } else {
+                    video.pause();
+                    btn.innerHTML = '▶';
+                }
+            } catch (err) {
+                console.error('视频播放控制失败：', err);
+            }
+        }
+
+        // 上传媒体
+        function uploadMedia() {
+            try {
+                const contentInput = document.getElementById('media-content');
+                const fileInput = document.getElementById('media-file');
+                const progressContainer = document.getElementById('progress-container');
+                const progressBar = document.getElementById('upload-progress');
+                
+                if (!contentInput || !fileInput || !progressContainer || !progressBar) return;
+                
+                const content = contentInput.value.trim();
+                const files = fileInput.files;
+                
+                if (!editMediaId && (!files || files.length === 0)) {
+                    alert('请选择要上传的图片或视频！');
+                    return;
+                }
+
+                const savedMedia = JSON.parse(localStorage.getItem(MEDIA_KEY) || '[]');
+                const existingMedia = editMediaId ? savedMedia.find(m=>m.id===editMediaId) : null;
+                const mediaData = {
+                    id: editMediaId || `media-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+                    author: userName,
+                    content: content,
+                    time: editMediaId ? (existingMedia?.time || Date.now()) : Date.now(),
+                    url: editMediaId ? (existingMedia?.url || '') : '',
+                    type: editMediaId ? (existingMedia?.type || 'image') : ''
+                };
+
+                // 显示进度条
+                progressContainer.style.display = 'block';
+                progressBar.style.width = '0%';
+
+                if (files && files.length > 0) {
+                    const file = files[0];
+                    let fileType = '';
+                    
+                    if (file.type.startsWith('image/')) {
+                        fileType = 'image';
+                    } else if (file.type.startsWith('video/')) {
+                        fileType = 'video';
+                    } else {
+                        alert('仅支持图片（JPG/PNG）和视频（MP4/WEBM）格式！');
+                        progressContainer.style.display = 'none';
+                        fileInput.value = '';
+                        return;
+                    }
+
+                    // 检查文件大小 (10MB限制)
+                    if (file.size > 10 * 1024 * 1024) {
+                        alert('文件大小不能超过10MB！');
+                        progressContainer.style.display = 'none';
+                        fileInput.value = '';
+                        return;
+                    }
+
+                    const reader = new FileReader();
+                    
+                    reader.onloadstart = function() {
+                        progressBar.style.width = '10%';
+                    };
+                    
+                    reader.onprogress = function(e) {
+                        if (e.lengthComputable) {
+                            const percent = (e.loaded / e.total) * 100;
+                            progressBar.style.width = `${percent}%`;
+                        }
+                    };
+                    
+                    reader.onload = function(e) {
+                        mediaData.url = e.target.result;
+                        mediaData.type = fileType;
+                        saveMediaData(mediaData, savedMedia);
+                        
+                        setTimeout(() => {
+                            progressContainer.style.display = 'none';
+                            progressBar.style.width = '0%';
+                        }, 500);
+                    };
+                    
+                    reader.onerror = function() {
+                        alert('文件读取失败，请重试！');
+                        progressContainer.style.display = 'none';
+                        progressBar.style.width = '0%';
+                        fileInput.value = '';
+                    };
+                    
+                    reader.readAsDataURL(file);
+                } else {
+                    saveMediaData(mediaData, savedMedia);
+                    progressContainer.style.display = 'none';
+                }
+            } catch (err) {
+                console.error('上传媒体失败：', err);
+                alert('上传失败，请重试');
+            }
+        }
+
+        // 保存媒体数据
+        function saveMediaData(mediaData, savedMedia) {
+            try {
+                if (editMediaId) {
+                    const idx = savedMedia.findIndex(m=>m.id===editMediaId);
+                    if (idx !== -1) savedMedia[idx] = mediaData;
+                } else {
+                    savedMedia.push(mediaData);
+                }
+
+                savedMedia.sort((a,b) => (b.time || 0) - (a.time || 0));
+                localStorage.setItem(MEDIA_KEY, JSON.stringify(savedMedia));
+                
+                const contentInput = document.getElementById('media-content');
+                const fileInput = document.getElementById('media-file');
+                if (contentInput) contentInput.value = '';
+                if (fileInput) fileInput.value = '';
+                
+                const uploadBtn = document.querySelector('.upload-btn');
+                if (uploadBtn) uploadBtn.innerText = '上传图文/视频';
+                
+                editMediaId = '';
+                loadMediaList();
+                
+                alert(editMediaId ? '修改成功！' : '上传成功！');
+            } catch (err) {
+                console.error('保存媒体数据失败：', err);
+                alert('保存失败，请重试');
+            }
+        }
+
+        // 编辑媒体
+        function editMedia(mediaId, event) {
+            try {
+                event.stopPropagation();
+                const savedMedia = JSON.parse(localStorage.getItem(MEDIA_KEY) || '[]');
+                const media = savedMedia.find(m=>m.id===mediaId);
+                
+                if (!media || (media.author !== userName && !isAdmin)) {
+                    alert('无权限编辑！');
+                    return;
+                }
+
+                const contentInput = document.getElementById('media-content');
+                if (contentInput) contentInput.value = media.content;
+                
+                const uploadBtn = document.querySelector('.upload-btn');
+                if (uploadBtn) uploadBtn.innerText = '保存修改';
+                
+                editMediaId = mediaId;
+                
+                const uploadArea = document.querySelector('.upload-area');
+                if (uploadArea) uploadArea.scrollIntoView({behavior: 'smooth'});
+            } catch (err) {
+                console.error('编辑媒体失败：', err);
+                alert('编辑失败，请重试');
+            }
+        }
+
+        // 删除媒体
+        function deleteMedia(mediaId, event) {
+            try {
+                event.stopPropagation();
+                if (!confirm('确定删除吗？删除后无法恢复！')) return;
+                
+                const savedMedia = JSON.parse(localStorage.getItem(MEDIA_KEY) || '[]');
+                const newMedia = savedMedia.filter(m=>m.id!==mediaId);
+                localStorage.setItem(MEDIA_KEY, JSON.stringify(newMedia));
+                
+                loadMediaList();
+                alert('删除成功！');
+            } catch (err) {
+                console.error('删除媒体失败：', err);
+                alert('删除失败，请重试');
+            }
+        }
+
+        // 点击空白处关闭预览
+        document.addEventListener('click', (e) => {
+            try {
+                const previewLayer = document.getElementById('media-preview');
+                if (previewLayer && previewLayer.style.display === 'flex' && e.target === previewLayer) {
+                    closeMediaPreview();
+                }
+            } catch (err) {
+                console.error('关闭预览事件失败：', err);
+            }
+        });
+
+        // 错误捕获：防止未处理异常导致页面崩溃
+        window.addEventListener('error', (event) => {
+            console.error('全局错误：', event.error);
+        });
+        
+        window.addEventListener('unhandledrejection', (event) => {
+            console.error('未处理的Promise错误：', event.reason);
+            event.preventDefault();
+        });
+    </script>
+</body>
+</html>
