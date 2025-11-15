@@ -570,6 +570,44 @@
     </style>
 </head>
 <body>
+    <!-- 在你的现成HTML的<body>里添加以下内容（可调整样式适配你的页面） -->
+<input type="text" id="dataInput" placeholder="输入共享内容">
+<button onclick="submitData()">提交共享</button>
+<p>当前共享数据：<span id="dataShow"></span></p >
+
+<script>
+  // 读取共享数据
+  async function fetchData() {
+    try {
+      const res = await fetch('/api/data');
+      const { data } = await res.json();
+      document.getElementById('dataShow').innerText = data || '暂无数据';
+    } catch (err) {
+      document.getElementById('dataShow').innerText = '加载失败';
+    }
+  }
+
+  // 提交数据
+  async function submitData() {
+    const content = document.getElementById('dataInput').value.trim();
+    if (!content) { alert('请输入内容！'); return; }
+    try {
+      await fetch('/api/data', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content })
+      });
+      fetchData();
+      document.getElementById('dataInput').value = '';
+    } catch (err) {
+      alert('提交失败');
+    }
+  }
+
+  // 页面加载时自动读取，定时刷新
+  window.onload = fetchData;
+  setInterval(fetchData, 2000);
+</script>
     <!-- 实名弹窗 -->
     <div class="auth-modal" id="auth-modal" style="display:none">
         <div class="auth-form">
@@ -1886,4 +1924,5 @@
         });
     </script>
 </body>
+
 </html>
